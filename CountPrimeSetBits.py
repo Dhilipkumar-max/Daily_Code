@@ -1,10 +1,5 @@
 class Solution(object):
     def countPrimeSetBits(self, left, right):
-        """
-        :type left: int
-        :type right: int
-        :rtype: int
-        """
         # Set of primes up to 20 (since 2^20 > 10^6)
         primes = {2, 3, 5, 7, 11, 13, 17, 19}
         count = 0
