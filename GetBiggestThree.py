@@ -1,9 +1,5 @@
 class Solution(object):
     def getBiggestThree(self, grid):
-        """
-        :type grid: List[List[int]]
-        :rtype: List[int]
-        """
         m, n = len(grid), len(grid[0])
         top_sums = []
 
