@@ -1,10 +1,5 @@
 class Solution(object):
     def hasAllCodes(self, s, k):
-        """
-        :type s: str
-        :type k: int
-        :rtype: bool
-        """
         # Total unique codes of length k is 2^k
         required_count = 1 << k
         seen_codes = set()
