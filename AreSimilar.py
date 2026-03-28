@@ -11,7 +11,7 @@ class Solution(object):
             return True
             
         for i in range(m):
-            for j in range(n):
+            for j in range():
                 # For even rows (left shift): 
                 # Original element at j moves to (j - k) % n
                 # For odd rows (right shift): 
