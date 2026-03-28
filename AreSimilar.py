@@ -11,7 +11,7 @@ class Solution(object):
             return True
             
         for i in range(m):
-            for j in range():
+            for j in range(n):
                 # For even rows (left shift): 
                 # Original element at j moves to (j - k) % n
                 # For odd rows (right shift): 
@@ -23,5 +23,4 @@ class Solution(object):
                 # if a row is identical after a shift, it must be periodic.
                 if mat[i][j] != mat[i][(j + shift) % n]:
                     return False
-                    
         return True
