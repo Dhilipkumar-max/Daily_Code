@@ -1,0 +1,45 @@
+from collections import defaultdict
+
+class Solution(object):
+    def solveQueries(self, nums, queries):
+        """
+        :type nums: List[int]
+        :type queries: List[int]
+        :rtype: List[int]
+        """
+        n = len(nums)
+        # Array to store the precomputed shortest distances. Default is -1.
+        min_dist = [-1] * n
+        
+        # Step 1: Group indices by their values
+        val_to_indices = defaultdict(list)
+        for i, val in enumerate(nums):
+            val_to_indices[val].append(i)
+            
+        # Step 2 & 3: Precompute minimum distances for elements appearing > 1 time
+        for indices in val_to_indices.values():
+            m = len(indices)
+            if m <= 1:
+                continue
+            
+            for p in range(m):
+                idx = indices[p]
+                
+                # Immediate neighbors in the sorted list of matching indices
+                prev_idx = indices[p - 1] # Python naturally wraps -1 to the last element
+                next_idx = indices[(p + 1) % m]
+                
+                # Calculate circular distance to the previous occurrence
+                d1 = abs(idx - prev_idx)
+                dist1 = min(d1, n - d1)
+                
+                # Calculate circular distance to the next occurrence
+                d2 = abs(idx - next_idx)
+                dist2 = min(d2, n - d2)
+                
+                # Store the absolute minimum distance found
+                min_dist[idx] = min(dist1, dist2)
+                
+        # Step 4: Map the queries to our precomputed answers array
+        return [min_dist[q] for q in queries]
+
