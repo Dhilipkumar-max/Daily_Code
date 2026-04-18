@@ -3,15 +3,11 @@ class Solution(object):
         MOD = 12345
         n, m = len(grid), len(grid[0])
         
-        # Initialize the result matrix with 1s
         p = [[1] * m for _ in range(n)]
-        
-        # Forward pass: calculate prefix products
         pref = 1
         for i in range(n):
             for j in range(m):
                 p[i][j] = pref
-                # Update the running prefix product for the next cell
                 pref = (pref * grid[i][j]) % MOD
                 
         # Backward pass: calculate suffix products and combine with prefixes
