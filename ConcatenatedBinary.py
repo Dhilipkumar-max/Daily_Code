@@ -1,9 +1,5 @@
 class Solution(object):
     def concatenatedBinary(self, n):
-        """
-        :type n: int
-        :rtype: int
-        """
         MOD = 10**9 + 7
         res = 0
         bit_length = 0
