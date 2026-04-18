@@ -1,10 +1,5 @@
 class Solution(object):
     def countSubmatrices(self, grid, k):
-        """
-        :type grid: List[List[int]]
-        :type k: int
-        :rtype: int
-        """
         n = len(grid[0])
         prev_row = [0] * n
         count = 0
