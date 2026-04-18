@@ -1,9 +1,5 @@
 class Solution(object):
     def countTrapezoids(self, points):
-        """
-        :type points: List[List[int]]
-        :rtype: int
-        """
         MOD = 10**9 + 7
 
         from collections import defaultdict
