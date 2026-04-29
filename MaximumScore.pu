@@ -1,0 +1,63 @@
+class Solution(object):
+    def maximumScore(self, grid):
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        """
+        n = len(grid)
+        if n == 0:
+            return 0
+
+        # Precompute column prefix sums to quickly calculate range sums.
+        # pref[j][k] = sum(grid[0...k-1][j])
+        pref = [[0] * (n + 1) for _ in range(n)]
+        for j in range(n):
+            for i in range(n):
+                pref[j][i + 1] = pref[j][i] + grid[i][j]
+
+        # Initialize DP for column 0
+        # dp[c][nxt] represents the max score up to col 0 with h_0 = c, h_1 = nxt
+        dp = [[0] * (n + 1) for _ in range(n + 1)]
+        for c in range(n + 1):
+            for nxt in range(n + 1):
+                dp[c][nxt] = max(0, pref[0][nxt] - pref[0][c])
+
+        # Execute DP transitions for columns 1 to n - 1
+        for j in range(1, n):
+            new_dp = [[0] * (n + 1) for _ in range(n + 1)]
+            for c in range(n + 1):
+                # 1. Precalculate the rolling max for scenarios where p <= nxt
+                pref_max_val1 = [0] * (n + 1)
+                curr_max = -1
+                for p in range(n + 1):
+                    if dp[p][c] > curr_max:
+                        curr_max = dp[p][c]
+                    pref_max_val1[p] = curr_max
+
+                # 2. Precalculate the rolling max for scenarios where p > nxt
+                suff_max_val2 = [-1] * (n + 2)
+                curr_max = -1
+                for p in range(n, -1, -1):
+                    # For p > nxt, max(p, nxt) evaluates to p
+                    val2 = dp[p][c] + max(0, pref[j][p] - pref[j][c])
+                    if val2 > curr_max:
+                        curr_max = val2
+                    suff_max_val2[p] = curr_max
+
+                # Form new_dp states in O(1) time using precalculated arrays
+                for nxt in range(n + 1):
+                    score1 = pref_max_val1[nxt] + max(0, pref[j][nxt] - pref[j][c])
+                    score2 = suff_max_val2[nxt + 1]
+                    new_dp[c][nxt] = max(score1, score2)
+
+            dp = new_dp
+
+        # The answer is the absolute maximum valid score configuration after the last column.
+        # Since column 'n' doesn't exist, its virtual height is 0 (h_n = 0).
+        ans = 0
+        for c in range(n + 1):
+            if dp[c][0] > ans:
+                ans = dp[c][0]
+
+        return ans
+
