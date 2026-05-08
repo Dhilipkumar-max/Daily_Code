@@ -1,0 +1,79 @@
+from collections import deque, defaultdict
+
+class Solution(object):
+    def minJumps(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        if n <= 1:
+            return 0
+            
+        max_val = max(nums)
+        # If there are no primes possible, we just do adjacent steps
+        if max_val < 2:
+            return n - 1
+            
+        # 1. Compute Smallest Prime Factor (SPF) using Sieve of Eratosthenes
+        spf = list(range(max_val + 1))
+        for i in range(2, int(max_val**0.5) + 1):
+            if spf[i] == i:
+                for j in range(i * i, max_val + 1, i):
+                    if spf[j] == j:
+                        spf[j] = i
+                        
+        # 2. Map each prime to the list of indices where nums[index] is a multiple of that prime
+        prime_to_indices = defaultdict(list)
+        for i, num in enumerate(nums):
+            x = num
+            while x > 1:
+                p = spf[x]
+                prime_to_indices[p].append(i)
+                # Divide out all occurrences of the prime factor p
+                while x % p == 0:
+                    x //= p
+                    
+        # 3. BFS Initialization
+        # Queue stores the current index
+        queue = deque([0])
+        visited = [False] * n
+        visited[0] = True
+        
+        # Set to track primes we've already teleported from to prevent TLE
+        visited_primes = set()
+        
+        jumps = 0
+        while queue:
+            size = len(queue)
+            for _ in range(size):
+                curr = queue.popleft()
+                
+                # If we've reached the last index, return the jump count
+                if curr == n - 1:
+                    return jumps
+                    
+                # Action A: Adjacent Steps (i - 1 and i + 1)
+                for nxt in (curr - 1, curr + 1):
+                    if 0 <= nxt < n and not visited[nxt]:
+                        visited[nxt] = True
+                        queue.append(nxt)
+                        
+                # Action B: Prime Teleportation
+                val = nums[curr]
+                
+                # Check if nums[curr] itself is a prime
+                if val >= 2 and spf[val] == val:
+                    if val not in visited_primes:
+                        visited_primes.add(val)
+                        
+                        # Teleport to all indices that are multiples of this prime
+                        for nxt in prime_to_indices[val]:
+                            if not visited[nxt]:
+                                visited[nxt] = True
+                                queue.append(nxt)
+                                
+            jumps += 1
+            
+        return -1
+
