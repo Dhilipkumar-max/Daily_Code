@@ -1,8 +1,6 @@
 class Solution(object):
     def canPartitionGrid(self, grid):
         m, n = len(grid), len(grid[0])
-        
-        # Arrays to store the sum of each row and each column
         row_sums = [0] * m
         col_sums = [0] * n
         
