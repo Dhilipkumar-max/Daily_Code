@@ -1,13 +1,5 @@
 class Solution(object):
     def countMentions(self, numberOfUsers, events):
-        """
-        :type numberOfUsers: int
-        :type events: List[List[str]]
-        :rtype: List[int]
-        """
-        # Sort events by timestamp (int) first.
-        # If timestamps are equal, prioritize 'OFFLINE' (0) over 'MESSAGE' (1).
-        # This ensures status updates are processed before messages at the same time.
         events.sort(key=lambda x: (int(x[1]), 0 if x[0] == "OFFLINE" else 1))
         
         mentions = [0] * numberOfUsers
